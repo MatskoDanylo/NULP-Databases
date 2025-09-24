@@ -1,0 +1,200 @@
+{
+	"info": {
+		"_postman_id": "9813c091-9968-4309-83ad-fceb59c9e505",
+		"name": "CRUD Operations for Ticketing System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "39330327"
+	},
+	"item": [
+		{
+			"name": "Get Customers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:5000/customers"
+			},
+			"response": []
+		},
+		{
+			"name": "Add customer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"first_name\": \"Anna\",\r\n    \"last_name\": \"Ivanova\",\r\n    \"email\": \"anna.ivanova@example.com\",\r\n    \"phone\": \"2345678901\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/customers"
+			},
+			"response": []
+		},
+		{
+			"name": "Update customer",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"first_name\": \"UpdatedName\",\r\n    \"last_name\": \"UpdatedSurname\",\r\n    \"email\": \"updated.email@example.com\",\r\n    \"phone\": \"9876543210\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/customers/2"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete customer",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://127.0.0.1:5000/customers/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Get order by client_id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/orders?customer_id=2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"orders"
+					],
+					"query": [
+						{
+							"key": "customer_id",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Print artists in event",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:5000/events/3/artists"
+			},
+			"response": []
+		},
+		{
+			"name": "Виклик процедури CopyToRandomTables",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"source_table\": \"artist\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/procedures/copy_to_random_tables"
+			},
+			"response": []
+		},
+		{
+			"name": "Виклик процедури CalculateDynamicStatistic",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"table_name\": \"customer\",\r\n  \"column_name\": \"id\",\r\n  \"stat_type\": \"MAX\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/procedures/calculate_dynamic_statistic\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Виклик процедури InsertBatchToExtraTable",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "http://127.0.0.1:5000/procedures/insert_batch_to_extra_table"
+			},
+			"response": []
+		},
+		{
+			"name": "Виклик процедури InsertIntoExtraTable",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"column_value\": \"Noname123\",\r\n    \"extra_value\": \"SomeAdditionalValue\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/procedures/insert_into_extra_table"
+			},
+			"response": []
+		},
+		{
+			"name": "Виклик процедури LinkArtistToAlbum",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"artist_id\": 1,\r\n  \"album_id\": 2\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/link_artist_to_album"
+			},
+			"response": []
+		}
+	]
+}
