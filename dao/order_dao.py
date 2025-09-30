@@ -7,7 +7,6 @@ def get_all_orders():
 
 
 def get_orders_by_customer(customer_id):
-    # Фільтрація замовлень за customer_id
     return Order.query.filter_by(customer_id=customer_id).all()
 
 

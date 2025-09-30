@@ -1,4 +1,6 @@
 from flask import Flask
+from flask_cors import CORS
+from flasgger import Swagger
 
 from config import Config
 from controllers.customer_controller import customer_bp
@@ -10,10 +12,114 @@ from extensions import db
 app = Flask(__name__)
 app.config.from_object(Config)
 
-# Ініціалізація об'єкта db
+# Enable CORS for all routes
+CORS(app)
+
+# Swagger configuration
+swagger_config = {
+    "headers": [],
+    "specs": [
+        {
+            "endpoint": 'apispec',
+            "route": '/apispec.json',
+            "rule_filter": lambda rule: True,
+            "model_filter": lambda tag: True,
+        }
+    ],
+    "static_url_path": "/flasgger_static",
+    "swagger_ui": True,
+    "specs_route": "/swagger/"
+}
+
+swagger_template = {
+    "swagger": "2.0",
+    "info": {
+        "title": "NULP Databases API",
+        "description": "Event Management System API",
+        "version": "1.0.0"
+    },
+    "host": "127.0.0.1:5000",
+    "basePath": "/",
+    "schemes": ["http"],
+}
+
+swagger = Swagger(app, config=swagger_config, template=swagger_template)
+
+# Health check endpoint
+@app.route('/health', methods=['GET'])
+def health_check():
+    """
+    Health check endpoint
+    ---
+    tags:
+      - Health
+    responses:
+      200:
+        description: API is healthy
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              example: "healthy"
+            message:
+              type: string
+              example: "API is running"
+    """
+    return {'status': 'healthy', 'message': 'API is running'}, 200
+
+# Database connection test endpoint
+@app.route('/test-db', methods=['GET'])
+def test_db_connection():
+    """
+    Test database connection
+    ---
+    tags:
+      - Health
+    responses:
+      200:
+        description: Database connection is working
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              example: "success"
+            message:
+              type: string
+              example: "Database connection successful"
+            customer_count:
+              type: integer
+              example: 5
+      500:
+        description: Database connection failed
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+              example: "error"
+            message:
+              type: string
+              example: "Database connection failed"
+    """
+    try:
+        from services.customer_service import get_all_customers
+        customers = get_all_customers()
+        return {
+            'status': 'success', 
+            'message': 'Database connection successful',
+            'customer_count': len(customers)
+        }, 200
+    except Exception as e:
+        return {
+            'status': 'error',
+            'message': f'Database connection failed: {str(e)}'
+        }, 500
+
 db.init_app(app)
 
-# Реєстрація маршруту
+
 app.register_blueprint(customer_bp)
 
 app.register_blueprint(order_bp)

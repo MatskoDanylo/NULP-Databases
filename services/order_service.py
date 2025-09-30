@@ -6,7 +6,6 @@ def get_all_orders():
 
 
 def get_orders_by_customer(customer_id):
-    # Виклик методу в DAO для отримання замовлень за customer_id
     return order_dao.get_orders_by_customer(customer_id)
 
 
