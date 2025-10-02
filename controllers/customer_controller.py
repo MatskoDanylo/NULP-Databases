@@ -6,6 +6,40 @@ from services import customer_service
 customer_bp = Blueprint('customer_bp', __name__)
 
 
+@customer_bp.route('/customers', methods=['GET'])
+def get_customers():
+    """
+    Get all customers
+    ---
+    tags:
+      - Customers
+    responses:
+      200:
+        description: List of all customers
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              customer_id:
+                type: integer
+                example: 1
+              first_name:
+                type: string
+                example: "John"
+              last_name:
+                type: string
+                example: "Doe"
+              email:
+                type: string
+                example: "john.doe@email.com"
+              phone:
+                type: string
+                example: "+1234567890"
+    """
+    customers = customer_service.get_all_customers()
+    return jsonify([customer.to_dict() for customer in customers])
+
 
 @customer_bp.route('/customers/<int:customer_id>', methods=['GET'])
 def get_customer(customer_id):
