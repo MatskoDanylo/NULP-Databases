@@ -7,8 +7,41 @@ event_bp = Blueprint('event_bp', __name__)
 
 
 @event_bp.route('/events', methods=['GET'])
-@swag_from('../swagger_docs/events/get_all_events.yml')
 def get_events():
+    """
+    Get all events
+    ---
+    tags:
+      - Events
+    responses:
+      200:
+        description: List of all events
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              event_id:
+                type: integer
+                example: 1
+              event_name:
+                type: string
+                example: "Summer Concert"
+              event_date:
+                type: string
+                format: date
+                example: "2025-07-15"
+              event_time:
+                type: string
+                format: time
+                example: "20:00:00"
+              location:
+                type: string
+                example: "Central Park"
+              event_type:
+                type: string
+                example: "Concert"
+    """
     events = event_service.get_all_events()
     return jsonify([event.to_dict() for event in events])
 
@@ -62,8 +95,53 @@ def get_event_artists(event_id):
 
 
 @event_bp.route('/events/<int:event_id>', methods=['GET'])
-@swag_from('../swagger_docs/events/get_event_by_id.yml')
 def get_event(event_id):
+    """
+    Get event by ID
+    ---
+    tags:
+      - Events
+    parameters:
+      - name: event_id
+        in: path
+        type: integer
+        required: true
+        description: Event ID
+    responses:
+      200:
+        description: Event details
+        schema:
+          type: object
+          properties:
+            event_id:
+              type: integer
+              example: 1
+            event_name:
+              type: string
+              example: "Summer Concert"
+            event_date:
+              type: string
+              format: date
+              example: "2025-07-15"
+            event_time:
+              type: string
+              format: time
+              example: "20:00:00"
+            location:
+              type: string
+              example: "Central Park"
+            event_type:
+              type: string
+              example: "Concert"
+      404:
+        description: Event not found
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Event not found"
+    """
     event = event_service.get_event_by_id(event_id)
     if event:
         return jsonify(event.to_dict())
@@ -71,8 +149,69 @@ def get_event(event_id):
 
 
 @event_bp.route('/events', methods=['POST'])
-@swag_from('../swagger_docs/events/create_event.yml')
 def create_event():
+    """
+    Create a new event
+    ---
+    tags:
+      - Events
+    parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            event_name:
+              type: string
+              example: "Summer Concert"
+            event_date:
+              type: string
+              format: date
+              example: "2025-07-15"
+            event_time:
+              type: string
+              format: time
+              example: "20:00:00"
+            location:
+              type: string
+              example: "Central Park"
+            event_type:
+              type: string
+              example: "Concert"
+          required:
+            - event_name
+            - event_date
+            - event_time
+            - location
+            - event_type
+    responses:
+      201:
+        description: Event created successfully
+        schema:
+          type: object
+          properties:
+            event_id:
+              type: integer
+              example: 1
+            event_name:
+              type: string
+              example: "Summer Concert"
+            event_date:
+              type: string
+              format: date
+              example: "2025-07-15"
+            event_time:
+              type: string
+              format: time
+              example: "20:00:00"
+            location:
+              type: string
+              example: "Central Park"
+            event_type:
+              type: string
+              example: "Concert"
+    """
     data = request.get_json()
     event = event_service.create_event(data['event_name'], data['event_date'], data['event_time'], data['location'],
                                        data['event_type'])
@@ -80,8 +219,74 @@ def create_event():
 
 
 @event_bp.route('/events/<int:event_id>', methods=['PUT'])
-@swag_from('../swagger_docs/events/update_event.yml')
 def update_event(event_id):
+    """
+    Update event by ID
+    ---
+    tags:
+      - Events
+    parameters:
+      - name: event_id
+        in: path
+        type: integer
+        required: true
+        description: Event ID
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            event_name:
+              type: string
+              example: "Summer Concert"
+            event_date:
+              type: string
+              format: date
+              example: "2025-07-15"
+            event_time:
+              type: string
+              format: time
+              example: "20:00:00"
+            location:
+              type: string
+              example: "Central Park"
+            event_type:
+              type: string
+              example: "Concert"
+          required:
+            - event_name
+            - event_date
+            - event_time
+            - location
+            - event_type
+    responses:
+      200:
+        description: Event updated successfully
+        schema:
+          type: object
+          properties:
+            event_id:
+              type: integer
+              example: 1
+            event_name:
+              type: string
+              example: "Summer Concert"
+            event_date:
+              type: string
+              format: date
+              example: "2025-07-15"
+            event_time:
+              type: string
+              format: time
+              example: "20:00:00"
+            location:
+              type: string
+              example: "Central Park"
+            event_type:
+              type: string
+              example: "Concert"
+    """
     data = request.get_json()
     event = event_service.update_event(event_id, data['event_name'], data['event_date'], data['event_time'],
                                        data['location'], data['event_type'])
@@ -89,7 +294,27 @@ def update_event(event_id):
 
 
 @event_bp.route('/events/<int:event_id>', methods=['DELETE'])
-@swag_from('../swagger_docs/events/delete_event.yml')
 def delete_event(event_id):
+    """
+    Delete event by ID
+    ---
+    tags:
+      - Events
+    parameters:
+      - name: event_id
+        in: path
+        type: integer
+        required: true
+        description: Event ID
+    responses:
+      204:
+        description: Event deleted successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Event deleted"
+    """
     event_service.delete_event(event_id)
     return {'message': 'Event deleted'}, 204
