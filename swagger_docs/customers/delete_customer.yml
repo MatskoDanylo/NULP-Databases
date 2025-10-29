@@ -1,0 +1,76 @@
+tags:
+  - Customers
+summary: Delete customer (with confirmation)
+description: Delete a customer from the system. This will also delete all related orders and tickets.
+parameters:
+  - name: customer_id
+    in: path
+    type: integer
+    required: true
+    description: The unique identifier of the customer to delete
+  - name: force
+    in: query
+    type: boolean
+    required: false
+    default: false
+    description: Force deletion even if there are related records
+responses:
+  200:
+    description: Customer deleted successfully
+    schema:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Customer and all related records deleted successfully"
+        deleted_records:
+          type: object
+          properties:
+            customer:
+              type: integer
+              example: 1
+              description: Number of customers deleted (always 1)
+            orders:
+              type: integer
+              example: 3
+              description: Number of related orders deleted
+            tickets:
+              type: integer
+              example: 5
+              description: Number of related tickets deleted
+  400:
+    description: Bad request - cannot delete due to constraints
+    schema:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: "Cannot delete customer with existing orders. Use force=true to override."
+  404:
+    description: Customer not found
+    schema:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: "Customer with ID 1 not found"
+  500:
+    description: Internal server error
+    schema:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: "Database error occurred"

@@ -1,0 +1,41 @@
+tags:
+  - Health
+summary: Database connection test
+description: Test the database connection and return connection status
+responses:
+  200:
+    description: Database connection successful
+    schema:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "connected"
+        message:
+          type: string
+          example: "Database connection successful"
+        database:
+          type: string
+          example: "ticketing_system_lab3"
+        timestamp:
+          type: string
+          format: datetime
+          example: "2023-01-15T14:30:00Z"
+  500:
+    description: Database connection failed
+    schema:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "error"
+        message:
+          type: string
+          example: "Database connection failed"
+        error:
+          type: string
+          example: "Connection timeout"
+        timestamp:
+          type: string
+          format: datetime
+          example: "2023-01-15T14:30:00Z"

@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
-from flasgger import Swagger
+from flasgger import Swagger, swag_from
 
 from config import Config
 from controllers.customer_controller import customer_bp
@@ -47,62 +47,14 @@ swagger = Swagger(app, config=swagger_config, template=swagger_template)
 
 # Health check endpoint
 @app.route('/health', methods=['GET'])
+@swag_from('swagger_docs/general/health_check.yml')
 def health_check():
-    """
-    Health check endpoint
-    ---
-    tags:
-      - Health
-    responses:
-      200:
-        description: API is healthy
-        schema:
-          type: object
-          properties:
-            status:
-              type: string
-              example: "healthy"
-            message:
-              type: string
-              example: "API is running"
-    """
     return {'status': 'healthy', 'message': 'API is running'}, 200
 
 # Database connection test endpoint
 @app.route('/test-db', methods=['GET'])
+@swag_from('swagger_docs/general/database_test.yml')
 def test_db_connection():
-    """
-    Test database connection
-    ---
-    tags:
-      - Health
-    responses:
-      200:
-        description: Database connection is working
-        schema:
-          type: object
-          properties:
-            status:
-              type: string
-              example: "success"
-            message:
-              type: string
-              example: "Database connection successful"
-            customer_count:
-              type: integer
-              example: 5
-      500:
-        description: Database connection failed
-        schema:
-          type: object
-          properties:
-            status:
-              type: string
-              example: "error"
-            message:
-              type: string
-              example: "Database connection failed"
-    """
     try:
         from services.customer_service import get_all_customers
         customers = get_all_customers()

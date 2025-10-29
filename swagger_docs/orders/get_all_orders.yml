@@ -1,0 +1,113 @@
+tags:
+  - Orders
+summary: Retrieve all orders
+description: Get a paginated list of all orders in the system with optional filtering
+parameters:
+  - name: page
+    in: query
+    type: integer
+    required: false
+    default: 1
+    description: Page number for pagination
+  - name: per_page
+    in: query
+    type: integer
+    required: false
+    default: 10
+    description: Number of orders per page (max 100)
+  - name: customer_id
+    in: query
+    type: integer
+    required: false
+    description: Filter orders by customer ID
+  - name: event_id
+    in: query
+    type: integer
+    required: false
+    description: Filter orders by event ID
+responses:
+  200:
+    description: Successful response with list of orders
+    schema:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        orders:
+          type: array
+          items:
+            type: object
+            properties:
+              order_id:
+                type: integer
+                example: 1
+              customer_id:
+                type: integer
+                example: 1
+              customer_name:
+                type: string
+                example: "John Doe"
+              customer_email:
+                type: string
+                example: "john.doe@email.com"
+              event_id:
+                type: integer
+                example: 1
+              event_name:
+                type: string
+                example: "Concert Night"
+              order_date:
+                type: string
+                format: datetime
+                example: "2023-01-15T14:30:00"
+              total_amount:
+                type: number
+                format: decimal
+                example: 150.00
+              delivery_option_id:
+                type: integer
+                example: 1
+              delivery_method:
+                type: string
+                example: "Email"
+              ticket_count:
+                type: integer
+                example: 2
+        pagination:
+          type: object
+          properties:
+            page:
+              type: integer
+              example: 1
+            per_page:
+              type: integer
+              example: 10
+            total:
+              type: integer
+              example: 50
+            pages:
+              type: integer
+              example: 5
+  400:
+    description: Bad request
+    schema:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: "Invalid pagination parameters"
+  500:
+    description: Internal server error
+    schema:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: "Database error occurred"
